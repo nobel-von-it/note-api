@@ -33,7 +33,10 @@ impl TryFrom<DirEntry> for FileEntry {
     type Error = std::io::Error;
     fn try_from(entry: DirEntry) -> Result<Self, Self::Error> {
         let name = entry.file_name().to_str().unwrap().to_string();
-        let path = fs::canonicalize(entry.path())?.to_str().unwrap().to_string();
+        let path = fs::canonicalize(entry.path())?
+            .to_str()
+            .unwrap()
+            .to_string();
 
         let file_type = FType::from(entry.file_type()?);
 

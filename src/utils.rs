@@ -3,7 +3,10 @@ use crate::models::FileEntry;
 use std::fs;
 use std::path::PathBuf;
 
-pub async fn get_dir_entries<P: AsRef<str>>(path: P, _all: bool) -> NoteApiLsResult<Vec<FileEntry>> {
+pub async fn get_dir_entries<P: AsRef<str>>(
+    path: P,
+    _all: bool,
+) -> NoteApiLsResult<Vec<FileEntry>> {
     let path = PathBuf::from(path.as_ref());
     if !path.exists() {
         return Err(NoteApiLsError::FileNotFound(path.display().to_string()));
