@@ -1,7 +1,7 @@
-use std::fs;
-use std::fs::{DirEntry, FileType, OpenOptions};
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
+use std::fs;
+use std::fs::{DirEntry, FileType};
 
 #[derive(Deserialize)]
 pub struct LsRequest {

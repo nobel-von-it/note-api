@@ -1,0 +1,11 @@
+[package]
+name = "note-api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = {version = "1.45.1", features = ["macros", "rt-multi-thread", "rt"]}
+axum = "0.8.4"
+serde = { version = "1.0.219", features = ["derive"] }
+thiserror = "2.0.12"
+chrono = {version = "0.4.41",features = ["serde"]}
