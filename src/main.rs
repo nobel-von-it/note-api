@@ -5,7 +5,7 @@ use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() {
-    let router = Router::new().route("/api/ls", get(handlers::api_ls));
+    let router = Router::new().route("/api/ls", get(handlers::api_ls)).route("/api/cd", get(handlers::api_cd));
 
     let listener = TcpListener::bind("127.0.0.1:8080").await.unwrap();
 

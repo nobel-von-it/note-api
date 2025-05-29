@@ -88,3 +88,31 @@ impl From<FileType> for FType {
         }
     }
 }
+
+#[derive(Deserialize)]
+pub struct CdRequest {
+    pub from: String,
+    pub to: String,
+}
+
+#[derive(Serialize)]
+pub struct CdResponse {
+    pub path: String,
+    pub abs_path: String,
+    pub error: Option<String>,
+}
+
+impl From<AbsAndPath> for CdResponse {
+    fn from(abs: AbsAndPath) -> Self {
+        Self {
+            path: abs.path,
+            abs_path: abs.abs_path,
+            error: None,
+        }
+    }
+}
+
+pub struct AbsAndPath {
+    pub path: String,
+    pub abs_path: String,
+}
