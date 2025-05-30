@@ -30,6 +30,7 @@ pub async fn form_ls_response(
     entries: Vec<FileEntry>,
     error: Option<String>,
 ) -> LsResponse {
+    // TODO: применить метод из handlers::api_ls
     match fs::canonicalize(&path) {
         Ok(path) => {
             LsResponse {
@@ -58,11 +59,11 @@ pub async fn change_dir<P: AsRef<str>>(_from: P, to: P) -> NoteApiFileResult<Abs
     let to = to.as_ref();
 
     let to_path = PathBuf::from(to);
-    if !to_path.exists() && !to_path.is_dir() {
+    if !to_path.exists() || !to_path.is_dir() {
         return Err(NoteApiFileError::FileNotFound(to.to_string()));
     }
 
-    env::set_current_dir(to)?;
+    env::set_current_dir(to_path)?;
 
     Ok(AbsAndPath {
         path: to.to_string(),

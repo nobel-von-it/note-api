@@ -17,7 +17,7 @@ pub struct LsResponse {
     pub error: Option<String>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 pub struct FileEntry {
     pub name: String,
     pub path: String,
