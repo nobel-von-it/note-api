@@ -10,3 +10,4 @@ serde = { version = "1.0.219", features = ["derive"] }
 thiserror = "2.0.12"
 chrono = {version = "0.4.41",features = ["serde"]}
 tracing = "0.1.41"
+tower-http = {version = "0.6.4", features = ["compression-full", "cors", "trace"]}

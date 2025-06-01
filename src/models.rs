@@ -4,6 +4,17 @@ use std::fs;
 use std::fs::{DirEntry, FileType};
 
 #[derive(Deserialize)]
+pub struct FileRequest {
+    pub path: String,
+}
+
+#[derive(Serialize)]
+pub struct FileResponse {
+    pub file: FileEntry,
+    pub error: Option<String>,
+}
+
+#[derive(Deserialize)]
 pub struct LsRequest {
     pub path: String,
     pub depth: usize,
@@ -24,6 +35,7 @@ pub struct FileEntry {
 
     pub file_type: FType,
     pub size: usize,
+    pub content: Option<Vec<String>>,
 
     // timestamp
     pub created_at: DateTime<Local>,
@@ -40,6 +52,13 @@ impl TryFrom<DirEntry> for FileEntry {
 
         let file_type = FType::from(entry.file_type()?);
 
+        let content: Option<Vec<String>> = match file_type {
+            FType::File => {
+                let file = fs::read_to_string(entry.path())?;
+                Some(file.lines().map(|l| l.to_string()).collect())
+            }
+            _ => None,
+        };
         let metadata = entry.metadata()?;
         let size = metadata.len() as usize;
 
@@ -49,6 +68,7 @@ impl TryFrom<DirEntry> for FileEntry {
         Ok(FileEntry {
             name,
             path,
+            content,
             file_type,
             size,
             created_at,
@@ -96,23 +116,20 @@ pub struct CdRequest {
 }
 
 #[derive(Serialize)]
-pub struct CdResponse {
-    pub path: String,
-    pub abs_path: String,
-    pub error: Option<String>,
-}
-
-impl From<AbsAndPath> for CdResponse {
-    fn from(abs: AbsAndPath) -> Self {
-        Self {
-            path: abs.path,
-            abs_path: abs.abs_path,
-            error: None,
-        }
-    }
-}
-
 pub struct AbsAndPath {
     pub path: String,
     pub abs_path: String,
+}
+
+#[derive(Serialize)]
+pub struct CdResponse {
+    pub from: AbsAndPath,
+    pub to: AbsAndPath,
+    pub error: Option<String>,
+}
+
+pub struct ChangeInfo {
+    pub from: AbsAndPath,
+    pub to: AbsAndPath,
+    pub new_current: String,
 }
